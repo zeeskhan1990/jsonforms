@@ -115,6 +115,10 @@ export const coreReducer = (
   }
 };
 
+
+/*HANDLE SEPARATELY*/
+
+
 export const extractData = state => state.data;
 export const extractSchema = state => state.schema;
 export const extractUiSchema = state => state.uischema;

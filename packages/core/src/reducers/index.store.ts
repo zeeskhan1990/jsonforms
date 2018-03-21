@@ -22,52 +22,29 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema } from './models/jsonSchema';
-import { UISchemaElement } from './models/uischema';
+import rendererStore from './renderers.store';
+import fieldStore from './fields.store';
+import configStore from './config.store';
+import coreStore from './core.store';
 import { ErrorObject } from 'ajv';
 
-/**
- * The state shape of JSONForms.
- */
-export interface JsonFormsState {
-  /**
-   * Represents JSONForm's sub-state.
-   */
-  jsonforms: {
-    /**
-     * Substate for storing mandatory sub-state.
-     */
-    core?: {
-      /**
-       * The actual data to be rendered.
-       */
-      data: any;
-      /**
-       * The JSON schema describing the data.
-       */
-      schema?: JsonSchema;
-      /**
-       * The UI schema that describes the UI to be rendered.
-       */
-      uischema?: UISchemaElement;
-      /**
-       * Any errors in case the data violates the JSON schema.
-       */
-      errors?: ErrorObject[]
-    };
-    /**
-     * Global configuration options.
-     */
-    config?: any;
-    /**
-     * All available renderers.
-     */
-    renderers?: any[];
-    /**
-     * All available field renderers.
-     */
-    fields?: any[];
-    // allow additional state
-    [additionalState: string]: any;
-  };
-}
+export {
+  rendererStore,
+  fieldStore,
+  coreStore,
+  configStore
+};
+
+
+export const getData = coreStore.extractData
+export const getSchema = coreStore.extractSchema
+export const getUiSchema = coreStore.extractUiSchema
+
+export const getErrorAt: (any) => ErrorObject[] = instancePath => {
+  return coreStore.errorAt(instancePath);
+};
+export const getSubErrorsAt: (any) => ErrorObject[] = instancePath => {
+  return coreStore.errorAt(instancePath);
+};
+
+export const getConfig = configStore.config

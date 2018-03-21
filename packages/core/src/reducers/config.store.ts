@@ -22,52 +22,29 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema } from './models/jsonSchema';
-import { UISchemaElement } from './models/uischema';
-import { ErrorObject } from 'ajv';
+import * as _ from 'lodash';
+import { configDefault } from '../configDefault';
+import {observable, action} from 'mobx';
 
-/**
- * The state shape of JSONForms.
- */
-export interface JsonFormsState {
-  /**
-   * Represents JSONForm's sub-state.
-   */
-  jsonforms: {
-    /**
-     * Substate for storing mandatory sub-state.
-     */
-    core?: {
-      /**
-       * The actual data to be rendered.
-       */
-      data: any;
-      /**
-       * The JSON schema describing the data.
-       */
-      schema?: JsonSchema;
-      /**
-       * The UI schema that describes the UI to be rendered.
-       */
-      uischema?: UISchemaElement;
-      /**
-       * Any errors in case the data violates the JSON schema.
-       */
-      errors?: ErrorObject[]
-    };
-    /**
-     * Global configuration options.
-     */
-    config?: any;
-    /**
-     * All available renderers.
-     */
-    renderers?: any[];
-    /**
-     * All available field renderers.
-     */
-    fields?: any[];
-    // allow additional state
-    [additionalState: string]: any;
-  };
+class ConfigStore {
+  @observable config: any;
+
+  constructor() {
+    this.config = this.applyDefaultConfiguration()
+  }
+
+  applyDefaultConfiguration(config: any = {}) {
+    _.merge(configDefault, config);
+  }
+
+  @action
+  setConfiguration = (config: any) => {
+    this.config = this.applyDefaultConfiguration(config)
+  }
+  
 }
+
+const configStore = new ConfigStore();
+
+export default configStore;
+export { ConfigStore };

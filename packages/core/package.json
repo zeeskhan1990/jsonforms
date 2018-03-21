@@ -16,13 +16,14 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
-    "build": "../../node_modules/.bin/tsc",
+    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
+    "build": "tsc",
+    "build-og": "tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
+    "test": "tsc --project test/tsconfig.test.json && ava",
+    "test-cov": "tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ava",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
@@ -41,6 +42,8 @@
   "dependencies": {
     "ajv": "^4.11.2",
     "lodash": "4.17.4",
+    "mobx": "^4.1.0",
+    "mobx-react": "^5.0.0",
     "redux": "^3.7.2",
     "uuid": "^3.1.0"
   },
