@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
-import { getErrorAt } from '../';
+import { getConfig, getData, getErrorAt } from '../reducers';
 import { RankedTester } from '../testers';
 import {
   composeWithUi,
@@ -34,11 +34,10 @@ import {
   StatePropsOfField
 } from '../util';
 import {
-  ActionPropsOfControl,
-  mapActionToControlProps,
+  DispatchPropsOfControl,
+  mapDispatchToControlProps,
   StatePropsOfScopedRenderer
 } from './renderer';
-import { IJsonFormsStore } from '../reducers';
 
 /**
  * State props of a field.
@@ -51,7 +50,7 @@ export interface StatePropsOfField extends StatePropsOfScopedRenderer {
 /**
  * Props of a field.
  */
-export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
+export interface FieldProps extends StatePropsOfField, DispatchPropsOfControl {
 
 }
 /**
@@ -60,11 +59,11 @@ export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
  * @param field the field to be registered
  * @returns {any}
  */
-export interface RendererFieldProps extends FieldProps {
+export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
-export const mapStateToRendererFieldProps = (store: IJsonFormsStore) => ({
-  fields: store.fieldStore.fields || []
+export const mapStateToDispatchFieldProps = state => ({
+  fields: state.jsonforms.fields || []
 });
 /**
  * Map state to field props.
@@ -73,23 +72,23 @@ export const mapStateToRendererFieldProps = (store: IJsonFormsStore) => ({
  * @param ownProps any own props
  * @returns {StatePropsOfField} state props of a field
  */
-export const mapStateToFieldProps = (store: IJsonFormsStore, ownProps): StatePropsOfField => {
+export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, store);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, store);
-  const errors = getErrorAt(path, store).map(error => error.message);
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
+  const errors = getErrorAt(path)(state).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
-  const defaultConfig = _.cloneDeep(store.configStore.config);
+  const defaultConfig = _.cloneDeep(getConfig(state));
   const config = _.merge(
     defaultConfig,
     ownProps.uischema.options
   );
 
   return {
-    data: Resolve.data(store.coreStore.extractData, path),
+    data: Resolve.data(getData(state), path),
     className: inputClassName.join(' '),
     visible,
     enabled,
@@ -104,9 +103,9 @@ export const mapStateToFieldProps = (store: IJsonFormsStore, ownProps): StatePro
 };
 
 /**
- * Synonym for mapActionToControlProps.
+ * Synonym for mapDispatchToControlProps.
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapActionToFieldProps: () => ActionPropsOfControl =
-  mapActionToControlProps;
+export const mapDispatchToFieldProps: (dispatch) => DispatchPropsOfControl =
+  mapDispatchToControlProps;

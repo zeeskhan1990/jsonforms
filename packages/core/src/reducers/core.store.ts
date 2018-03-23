@@ -28,8 +28,8 @@ import { ErrorObject, ValidateFunction } from 'ajv';
 import {observable, action, computed} from 'mobx';
 import { JsonSchema, UISchemaElement } from '..';
 
-class CoreStore {
-  @observable data: any;
+export class CoreStore {
+  @observable data: object;
   @observable schema: object;
   @observable uischema: object;
   @observable errors: AJV.ErrorObject[];
@@ -144,4 +144,3 @@ class CoreStore {
 const coreStore = new CoreStore();
 
 export default coreStore;
-export { CoreStore };

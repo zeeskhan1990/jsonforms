@@ -24,13 +24,16 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
-import { JsonFormsProps, mapStateToDispatchRendererProps } from '@jsonforms/core';
+import { JsonFormsMergedProps, mapStateToRendererProps, jsonFormsStore } from '@jsonforms/core';
+import { inject, observer } from "mobx-react"
 
-const JsonFormsDispatchRenderer =
-  ({ uischema, schema, path, renderers }: JsonFormsProps) => {
-  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+class JsonFormsRenderer extends React.Component<JsonFormsMergedProps, null> {
+  render() {
+    const { uischema, schema, path, renderers } =  this.props;
+
+    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+  
   if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer type={'renderer'}/>;
   } else {
@@ -45,9 +48,42 @@ const JsonFormsDispatchRenderer =
       />
     );
   }
-};
+  }
+}
 
-export const JsonForms = connect(
-  mapStateToDispatchRendererProps,
+/* const JsonFormsDispatchRenderer =
+  ({ uischema, schema, path, renderers }: JsonFormsProps) => {
+  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+  
+  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
+    return <UnknownRenderer type={'renderer'}/>;
+  } else {
+    const Render = renderer.renderer;
+
+    return (
+      <Render
+        uischema={uischema}
+        schema={schema}
+        path={path}
+        renderers={renderers}
+      />
+    );
+  }
+}; */
+
+@inject("jsonFormsStore")
+@observer
+export class JsonForms extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...otherProps} = this.props
+    const effectiveProps = mapStateToRendererProps(jsonFormsStore, otherProps);
+    return (
+      <JsonFormsRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* export const JsonForms = connect(
+  mapStateToActionRendererProps,
   null
-)(JsonFormsDispatchRenderer);
+)(JsonFormsDispatchRenderer); */

@@ -26,7 +26,7 @@ import * as _ from 'lodash';
 import { configDefault } from '../configDefault';
 import {observable, action} from 'mobx';
 
-class ConfigStore {
+export class ConfigStore {
   @observable config: any;
 
   constructor() {
@@ -47,4 +47,3 @@ class ConfigStore {
 const configStore = new ConfigStore();
 
 export default configStore;
-export { ConfigStore };

@@ -34,12 +34,15 @@ import {
 import { RankedTester } from '../testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
+  getConfig,
+  getData,
   getErrorAt,
-  getSubErrorsAt
-} from '../';
+  getSchema,
+  getSubErrorsAt,
+  getUiSchema
+} from '../reducers';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
-import { IJsonFormsStore } from '../reducers';
 
 export interface Labels {
   default: string;
@@ -158,7 +161,7 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
 /**
  * Props of a Control.
  */
-export interface ControlProps extends StatePropsOfControl, ActionPropsOfControl {}
+export interface ControlProps extends StatePropsOfControl, DispatchPropsOfControl {}
 /**
  * State props of a layout;
  */
@@ -205,20 +208,10 @@ export interface ControlState {
 export interface JsonFormsProps extends StatePropsOfScopedRenderer {
   renderers?: { tester: RankedTester, renderer: any }[];
 }
-
-export interface JsonFormsMergedProps{
-  renderers: {
-      tester: RankedTester;
-      renderer: any;
-  }[];
-  schema: any;
-  uischema: any;
-  path: any;
-}
 /**
- * Action-based props of a Control.
+ * Dispatch-based props of a Control.
  */
-export interface ActionPropsOfControl {
+export interface DispatchPropsOfControl {
   /**
    * Update handler that emits a data change
    *
@@ -228,11 +221,10 @@ export interface ActionPropsOfControl {
   handleChange(path: string, value: any);
 }
 
-export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps) => ({
-  renderers: store.rendererStore.renderers || [],
-  schema: ownProps.schema || store.coreStore.extractSchema,
-  uischema: ownProps.uischema || store.coreStore.extractUiSchema,
-  path: ownProps.path
+export const mapStateToDispatchRendererProps = (state, ownProps) => ({
+  renderers: state.jsonforms.renderers || [],
+  schema: ownProps.schema || getSchema(state),
+  uischema: ownProps.uischema || getUiSchema(state)
 });
 
 /**
@@ -241,11 +233,11 @@ export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps) => ({
  * @param ownProps any own props
  * @returns {StatePropsOfLayout}
  */
-export const mapStateToLayoutProps = (store: IJsonFormsStore, ownProps): StatePropsOfLayout => {
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, store);
+export const mapStateToLayoutProps = (state, ownProps): StatePropsOfLayout => {
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
-    renderers: store.rendererStore.renderers,
+    renderers: state.renderers,
     visible,
     path: ownProps.path,
     uischema: ownProps.uischema,
@@ -300,27 +292,27 @@ export const isDescriptionHidden =
  * @param ownProps any own props
  * @returns {StatePropsOfControl} state props for a control
  */
-export const mapStateToControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfControl => {
+export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, store);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, store);
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const errors = getErrorAt(path, store).map(error => error.message);
+  const errors = getErrorAt(path)(state).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
   const description = resolvedSchema !== undefined ? resolvedSchema.description : '';
-  const defaultConfig = _.cloneDeep(store.configStore.config);
+  const defaultConfig = _.cloneDeep(getConfig(state));
   const config = _.merge(
     defaultConfig,
     controlElement.options
   );
 
   return {
-    data: Resolve.data(store.coreStore.extractData, path),
+    data: Resolve.data(getData(state), path),
     description,
     errors,
     label,
@@ -339,12 +331,14 @@ export const mapStateToControlProps = (store: IJsonFormsStore, ownProps): StateP
 
 /**
  *
- * Map action to control props.
- * @returns {ActionPropsOfControl} action props for a control
+ * Map dispatch to control props.
+ *
+ * @param dispatch the store's dispatch method
+ * @returns {DispatchPropsOfControl} dispatch props for a control
  */
-export const mapActionToControlProps = (): ActionPropsOfControl => ({
+export const mapDispatchToControlProps = (dispatch): DispatchPropsOfControl => ({
   handleChange(path, value) {
-    update(path, () => value)
+    dispatch(update(path, () => value));
   }
 });
 
@@ -363,12 +357,12 @@ export interface StatePropsOfTable extends StatePropsOfControl {
  * @param ownProps any element's own props
  * @returns {StatePropsOfTable} state props for a table control
  */
-export const mapStateToTableControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfTable => {
-  const {path, ...props} = mapStateToControlProps(store, ownProps);
+export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable => {
+  const {path, ...props} = mapStateToControlProps(state, ownProps);
   const controlElement = ownProps.uischema as ControlElement;
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
-  const childErrors = getSubErrorsAt(path, store);
+  const childErrors = getSubErrorsAt(path)(state);
 
   return {
     ...props,
@@ -379,9 +373,9 @@ export const mapStateToTableControlProps = (store: IJsonFormsStore, ownProps): S
 };
 
 /**
- * Action props of a table control
+ * Dispatch props of a table control
  */
-export interface ActionPropsOfTable {
+export interface DispatchPropsOfTable {
   addItem(path: string): void;
   removeItems(path: string, toDelete: any[]);
 }
@@ -389,18 +383,19 @@ export interface ActionPropsOfTable {
 /**
  * Props of a table.
  */
-export interface TableControlProps extends StatePropsOfTable, ActionPropsOfTable {
+export interface TableControlProps extends StatePropsOfTable, DispatchPropsOfTable {
 
 }
 
 /**
- * Map action to table control props
+ * Map dispatch to table control props
  *
- * @param action the store's action method
- * @returns {ActionPropsOfTable} action props for a table control
+ * @param dispatch the store's dispatch method
+ * @returns {DispatchPropsOfTable} dispatch props for a table control
  */
-export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
+export const mapDispatchToTableControlProps = (dispatch): DispatchPropsOfTable => ({
   addItem: (path: string) => () => {
+    dispatch(
       update(
         path,
         array => {
@@ -413,15 +408,19 @@ export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
           return array;
         }
       )
+    );
   },
   removeItems: (path: string, toDelete: any[]) => () => {
+    dispatch(
       update(
         path,
         array => {
           const clone = _.clone(array);
           toDelete.forEach(s => clone.splice(clone.indexOf(s), 1));
+
           return clone;
         }
       )
+    );
   }
 });

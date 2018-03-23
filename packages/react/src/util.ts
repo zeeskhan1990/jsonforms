@@ -24,10 +24,11 @@
 */
 import * as _ from 'lodash';
 import {
-    getPropsTransformer,
-    mapDispatchToControlProps,
-    mapStateToControlProps
+    mapActionToControlProps,
+    mapStateToControlProps,
+    IJsonFormsStore
     } from '@jsonforms/core';
+import { getPropsTransformers } from '@jsonforms/core'
 import { connect } from 'react-redux';
 /**
  * JSONForms specific connect function. This is a wrapper
@@ -41,15 +42,19 @@ import { connect } from 'react-redux';
  */
 export const connectToJsonForms = (
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
-  mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
+  mapDispatchToProps: (dispatch, ownProps) => any = mapActionToControlProps) => Component => {
 
   return connect(
-    (state, ownProps) =>
-      (getPropsTransformer(state) || []).reduce(
+    (state, ownProps) => {
+      (getPropsTransformers(state) || []).reduce(
         (props, materializer) =>
           _.merge(props, materializer(state, props)),
         mapStateToProps(state, ownProps)
-      ),
+      )},
     mapDispatchToProps
   )(Component);
 };
+
+export const connectTransformers = (store: IJsonFormsStore, ownProps: any) : any => {
+  
+}

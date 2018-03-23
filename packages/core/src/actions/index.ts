@@ -25,33 +25,33 @@
 import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
-import {rendererStore, fieldStore, coreStore, configStore} from '../reducers/index.store';
+import {jsonFormsStore} from '../reducers/index';
 
 export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
   uischema: UISchemaElement = generateDefaultUISchema(schema)
-) =>  coreStore.initialize(data, schema, uischema)
+) =>  jsonFormsStore.coreStore.initialize(data, schema, uischema)
 
 export const update =
-  (path: string, updater: (any) => any) =>  coreStore.updateData(path, updater)
+  (path: string, updater: (any) => any) =>  jsonFormsStore.coreStore.updateData(path, updater)
 
 export const registerRenderer = (
   tester: RankedTester,
   renderer: any
-) =>  rendererStore.addRenderer(tester, renderer)
+) =>  jsonFormsStore.rendererStore.addRenderer(tester, renderer)
 
 export const registerField = (
   tester: RankedTester,
   field: any
-) => fieldStore.addField(tester, field)
+) => jsonFormsStore.fieldStore.addField(tester, field)
 
 export const unregisterField = (
   tester: RankedTester
-) => fieldStore.removeField(tester)
+) => jsonFormsStore.fieldStore.removeField(tester)
 
 export const unregisterRenderer = (
   tester: RankedTester
-) => rendererStore.removeRenderer(tester)
+) => jsonFormsStore.rendererStore.removeRenderer(tester)
 
-export const setConfig = config => configStore.setConfiguration(config)
+export const setConfig = config => jsonFormsStore.configStore.setConfiguration(config)

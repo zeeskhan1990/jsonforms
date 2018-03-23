@@ -22,46 +22,31 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { combineReducers, Reducer } from 'redux';
-import { rendererReducer } from './renderers';
-import { fieldReducer } from './fields';
-import { transformPropsReducer } from './transformProps';
-import { configReducer } from './config';
-import {
-  coreReducer,
-  errorAt,
-  extractData,
-  extractSchema,
-  extractUiSchema,
-  subErrorsAt
-} from './core';
-import { JsonFormsState } from '../store';
+import rendererStore, { RendererStore } from './renderers.store';
+import fieldStore, { FieldStore } from './fields.store';
+import configStore, { ConfigStore } from './config.store';
+import coreStore, { CoreStore } from './core.store';
+import transformProps, {TransformPropsStore} from './transformProps.store'
 
-export {
-  rendererReducer,
-  fieldReducer,
-  coreReducer
+export interface IJsonFormsStore {
+  rendererStore: RendererStore
+  fieldStore: FieldStore
+  coreStore: CoreStore
+  configStore: ConfigStore
+  transformProps: TransformPropsStore
+}
+
+export const jsonFormsStore: IJsonFormsStore = {
+  rendererStore,
+  fieldStore,
+  coreStore,
+  configStore,
+  transformProps
 };
 
-export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsState> =>
-  combineReducers<JsonFormsState>({
-    core: coreReducer,
-    renderers: rendererReducer,
-    fields: fieldReducer,
-    transformProps: transformPropsReducer,
-    config: configReducer,
-    ...additionalReducers
-  });
 
-export const getData = state => extractData(state.jsonforms.core);
-export const getSchema = state => extractSchema(state.jsonforms.core);
-export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
+/* export const getData = coreStore.extractData
+export const getSchema = coreStore.extractSchema
+export const getUiSchema = coreStore.extractUiSchema */
 
-export const getErrorAt = instancePath => state => {
-  return errorAt(instancePath)(state.jsonforms.core);
-};
-export const getSubErrorsAt = instancePath => state =>
-  subErrorsAt(instancePath)(state.jsonforms.core);
-
-export const getPropsTransformer = state => state.jsonforms.transformProps;
-export const getConfig = state => state.jsonforms.config;
+/* export const getConfig = configStore.config */

@@ -25,11 +25,16 @@
 import { RankedTester } from '../testers';
 import {observable, action} from 'mobx';
 
-class FieldStore {
+export class FieldStore {
   @observable fields: { tester: RankedTester, field: any }[]
 
   constructor() {
     this.fields = []
+  }
+
+  @action
+  setFields = (fields) => {
+    this.fields = fields;
   }
 
   @action
@@ -46,4 +51,3 @@ class FieldStore {
 const fieldStore = new FieldStore();
 
 export default fieldStore;
-export { FieldStore };

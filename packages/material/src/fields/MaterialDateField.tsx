@@ -26,7 +26,7 @@ import * as React from 'react';
 import {
   FieldProps,
   isDateControl,
-  mapDispatchToFieldProps,
+  mapActionToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith
@@ -51,4 +51,4 @@ export const MaterialDateField = (props: FieldProps) => {
   );
 };
 export const materialDateFieldTester: RankedTester = rankWith(2, isDateControl);
-export default connectToJsonForms(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField);
+export default connectToJsonForms(mapStateToFieldProps, mapActionToFieldProps)(mapActionToFieldProps);

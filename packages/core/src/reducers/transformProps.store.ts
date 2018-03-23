@@ -22,29 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import rendererStore from './renderers.store';
-import fieldStore from './fields.store';
-import configStore from './config.store';
-import coreStore from './core.store';
-import { ErrorObject } from 'ajv';
+import {observable, action} from 'mobx';
 
-export {
-  rendererStore,
-  fieldStore,
-  coreStore,
-  configStore
-};
+export class TransformPropsStore {
+  @observable transformers: any
 
+  constructor() {
+    this.transformers = []
+  }
 
-export const getData = coreStore.extractData
-export const getSchema = coreStore.extractSchema
-export const getUiSchema = coreStore.extractUiSchema
+  @action
+  setTransformers = (transformers) => {
+    this.transformers = transformers;
+  }
 
-export const getErrorAt: (any) => ErrorObject[] = instancePath => {
-  return coreStore.errorAt(instancePath);
-};
-export const getSubErrorsAt: (any) => ErrorObject[] = instancePath => {
-  return coreStore.errorAt(instancePath);
-};
+  @action
+  addTransformer = (transformer) => {
+    this.transformers = this.transformers.concat([transformer]);
+  }
+}
 
-export const getConfig = configStore.config
+const transformPropsStore = new TransformPropsStore();
+
+export default transformPropsStore;

@@ -24,10 +24,10 @@
 */
 import * as _ from 'lodash';
 // TODO: pass in uischema and data instead of props and state
+import { getData } from '../reducers';
 import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
-import { IJsonFormsStore } from '../reducers';
 
 export const evalVisibility = (uischema: UISchemaElement, data: any) => {
   // TODO condition evaluation should be done somewhere else
@@ -66,19 +66,19 @@ export const evalEnablement = (uischema: UISchemaElement, data: any) => {
   }
 };
 
-export const isVisible = (props, store: IJsonFormsStore) => {
+export const isVisible = (props, state) => {
 
   if (props.uischema.rule) {
-    return evalVisibility(props.uischema, store.coreStore.extractData);
+    return evalVisibility(props.uischema, getData(state));
   }
 
   return true;
 };
 
-export const isEnabled = (props, store: IJsonFormsStore) => {
+export const isEnabled = (props, state) => {
 
   if (props.uischema.rule) {
-    return evalEnablement(props.uischema, store.coreStore.extractData);
+    return evalEnablement(props.uischema, getData(state));
   }
 
   return true;

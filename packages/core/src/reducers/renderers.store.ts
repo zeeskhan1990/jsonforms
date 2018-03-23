@@ -25,11 +25,16 @@
 import { RankedTester } from '../testers';
 import {observable, action} from 'mobx';
 
-class RendererStore {
+export class RendererStore {
   @observable renderers: { tester: RankedTester, renderer: any }[]
 
   constructor() {
     this.renderers = []
+  }
+
+  @action
+  setRenderers = (renderers) => {
+    this.renderers = renderers;
   }
 
   @action
@@ -46,4 +51,3 @@ class RendererStore {
 const rendererStore = new RendererStore();
 
 export default rendererStore;
-export { RendererStore };

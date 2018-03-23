@@ -22,11 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, Scopable, IJsonFormsStore } from '../';
+import { JsonSchema, Scopable } from '../';
 import { resolveData, resolveSchema } from './resolvers';
 import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
-import { ErrorObject } from 'ajv';
 
 export { createLabelDescriptionFrom } from './label';
 
@@ -72,22 +71,11 @@ const Paths = {
 export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
-const Runtime: any = {
+const Runtime = {
   isEnabled,
-  isVisible
+  isVisible,
 };
-
-const getErrorAt: (any, IJsonFormsStore) => ErrorObject[] = (instancePath, store) => {
-  return store.coreStore.errorAt(instancePath);
-};
-
-const getPropsTransformers = (store:IJsonFormsStore) => store.transformProps.transformers;
-
-const getSubErrorsAt: (any, IJsonFormsStore) => ErrorObject[] = (instancePath, store) => {
-  return store.coreStore.errorAt(instancePath);
-};
-
-export { isEnabled, isVisible, Runtime, getErrorAt, getPropsTransformers, getSubErrorsAt };
+export { isEnabled, isVisible, Runtime };
 
 export * from './renderer';
 export * from './field';
