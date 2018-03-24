@@ -30,6 +30,7 @@ import {
     } from '@jsonforms/core';
 import { getPropsTransformers } from '@jsonforms/core'
 import { connect } from 'react-redux';
+import { Component } from 'react';
 /**
  * JSONForms specific connect function. This is a wrapper
  * around redux's connect function that executes any registered
@@ -55,6 +56,24 @@ export const connectToJsonForms = (
   )(Component);
 };
 
-export const connectTransformers = (store: IJsonFormsStore, ownProps: any) : any => {
-  
-}
+export const connectComponentToJsonForms = (
+  store: IJsonFormsStore,
+  ownProps: any,
+  mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
+  mapDispatchToProps: (dispatch, ownProps) => any = mapActionToControlProps) => Component => {
+
+    const propsFromState: any = mapStateToProps(store, ownProps)
+    const propsFromDispatch: any = mapDispatchToProps(store, ownProps)
+
+    
+
+  /* return connect(
+    (state, ownProps) => {
+      (getPropsTransformers(state) || []).reduce(
+        (props, materializer) =>
+          _.merge(props, materializer(state, props)),
+        mapStateToProps(state, ownProps)
+      )},
+    mapDispatchToProps
+  )(Component); */
+};

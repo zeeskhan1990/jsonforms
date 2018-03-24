@@ -26,15 +26,20 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { DispatchFieldProps, mapStateToDispatchFieldProps } from '@jsonforms/core';
+import {observer, inject} from 'mobx-react'
+import { RendererFieldProps, mapStateToRendererFieldProps } from '@jsonforms/core';
 /**
  * Props of the {@link DispatchField} renderer.
  */
   /**
    * The available field renderers.
    */
+@inject("jsonFormsStore")
+@observer
+class test extends React.Component<any, any>{
 
-const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
+}
+const Dispatch = (dispatchFieldProps: RendererFieldProps) => {
   const uischema = dispatchFieldProps.uischema;
   const schema = dispatchFieldProps.schema;
   const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
@@ -54,4 +59,4 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   }
 };
 
-export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);
+export const DispatchField = connect(mapStateToRendererFieldProps)(Dispatch);

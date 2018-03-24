@@ -26,14 +26,14 @@ import rendererStore, { RendererStore } from './renderers.store';
 import fieldStore, { FieldStore } from './fields.store';
 import configStore, { ConfigStore } from './config.store';
 import coreStore, { CoreStore } from './core.store';
-import transformProps, {TransformPropsStore} from './transformProps.store'
+import transformPropsStore, {TransformPropsStore} from './transformProps.store'
 
 export interface IJsonFormsStore {
   rendererStore: RendererStore
   fieldStore: FieldStore
   coreStore: CoreStore
   configStore: ConfigStore
-  transformProps: TransformPropsStore
+  transformPropsStore: TransformPropsStore
 }
 
 export const jsonFormsStore: IJsonFormsStore = {
@@ -41,7 +41,7 @@ export const jsonFormsStore: IJsonFormsStore = {
   fieldStore,
   coreStore,
   configStore,
-  transformProps
+  transformPropsStore
 };
 
 

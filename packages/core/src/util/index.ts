@@ -81,7 +81,7 @@ const getErrorAt: (any, IJsonFormsStore) => ErrorObject[] = (instancePath, store
   return store.coreStore.errorAt(instancePath);
 };
 
-const getPropsTransformers = (store:IJsonFormsStore) => store.transformProps.transformers;
+const getPropsTransformers = (store:IJsonFormsStore) => store.transformPropsStore.transformers;
 
 const getSubErrorsAt: (any, IJsonFormsStore) => ErrorObject[] = (instancePath, store) => {
   return store.coreStore.errorAt(instancePath);

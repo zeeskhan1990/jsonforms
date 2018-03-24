@@ -206,12 +206,12 @@ export interface JsonFormsProps extends StatePropsOfScopedRenderer {
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 
-export interface JsonFormsMergedProps{
+export interface JsonFormsRendererProps {
   renderers: {
       tester: RankedTester;
       renderer: any;
   }[];
-  schema: any;
+  schema: any ;
   uischema: any;
   path: any;
 }

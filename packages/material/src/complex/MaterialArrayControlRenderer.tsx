@@ -25,7 +25,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  mapDispatchToTableControlProps,
+  mapActionToTableControlProps,
   mapStateToTableControlProps,
   TableControlProps
 } from '@jsonforms/core';
@@ -158,5 +158,5 @@ export interface TableState {
 
 export default connectToJsonForms(
   mapStateToTableControlProps,
-  mapDispatchToTableControlProps
+  mapActionToTableControlProps
 )(MaterialArrayControlRenderer);
