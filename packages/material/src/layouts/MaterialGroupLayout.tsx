@@ -34,8 +34,9 @@ import {
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import { inject, observer } from 'mobx-react';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
@@ -66,8 +67,22 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     );
 };
 
-export default connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedGroupLayout extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterializedGroupLayoutRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToLayoutProps
-)(MaterializedGroupLayoutRenderer);
+)(MaterializedGroupLayoutRenderer); */
 
 export const materialGroupTester: RankedTester = withIncreasedRank(1, groupTester);

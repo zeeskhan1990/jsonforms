@@ -35,10 +35,11 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
+import { Control, DispatchField, mergeTransformProps } from '@jsonforms/react';
 
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
+import { inject, observer } from 'mobx-react';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
   render() {
@@ -81,4 +82,19 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);
-export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedInputControl extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterialInputControl {...effectiveProps}/>
+    )
+  }
+}
+
+//export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);

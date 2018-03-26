@@ -26,13 +26,14 @@ import * as React from 'react';
 import {
   FieldProps,
   isStringControl,
-  mapDispatchToFieldProps,
+  mapActionToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import Input from 'material-ui/Input';
+import { inject, observer } from 'mobx-react';
 
 export const MaterialTextField = (props: FieldProps) => {
   const {
@@ -80,7 +81,22 @@ export const MaterialTextField = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const materialTextFieldTester: RankedTester = rankWith(1, isStringControl);
-export default connectToJsonForms(
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedTextField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    return (
+      <MaterialTextField {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(MaterialTextField);
+  mapActionToFieldProps
+)(MaterialTextField); */

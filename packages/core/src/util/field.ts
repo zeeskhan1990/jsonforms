@@ -60,12 +60,15 @@ export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
  * @param field the field to be registered
  * @returns {any}
  */
-export interface RendererFieldProps extends FieldProps {
+export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
-export const mapStateToRendererFieldProps = (store: IJsonFormsStore) => ({
-  fields: store.fieldStore.fields || []
-});
+export const mapStateToDispatchFieldProps = (store: IJsonFormsStore, ownProps) : DispatchFieldProps => {
+  const fromFieldProps = mapStateToFieldProps(store, ownProps);
+  const fromActionProps = mapActionToControlProps();
+  const fields = store.fieldStore.fields;
+  return Object.assign({}, fromActionProps, fromFieldProps, {fields});
+}
 /**
  * Map state to field props.
  *

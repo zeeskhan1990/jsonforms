@@ -202,11 +202,12 @@ export interface ControlState {
   isFocused: boolean;
 }
 
-export interface JsonFormsProps extends StatePropsOfScopedRenderer {
+//Originally JsonFormsProps
+export interface JsonFormsRendererProps extends StatePropsOfScopedRenderer {
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 
-export interface JsonFormsRendererProps {
+export interface JsonFormsProps {
   renderers: {
       tester: RankedTester;
       renderer: any;
@@ -228,7 +229,7 @@ export interface ActionPropsOfControl {
   handleChange(path: string, value: any);
 }
 
-export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps) => ({
+export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps): JsonFormsProps => ({
   renderers: store.rendererStore.renderers || [],
   schema: ownProps.schema || store.coreStore.extractSchema,
   uischema: ownProps.uischema || store.coreStore.extractUiSchema,

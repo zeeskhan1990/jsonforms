@@ -23,23 +23,19 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
 import {observer, inject} from 'mobx-react'
-import { RendererFieldProps, mapStateToRendererFieldProps } from '@jsonforms/core';
+import { DispatchFieldProps, mapStateToDispatchFieldProps } from '@jsonforms/core';
+/**dProps } from '@jsonforms/core';
 /**
  * Props of the {@link DispatchField} renderer.
  */
   /**
    * The available field renderers.
    */
-@inject("jsonFormsStore")
-@observer
-class test extends React.Component<any, any>{
 
-}
-const Dispatch = (dispatchFieldProps: RendererFieldProps) => {
+const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   const uischema = dispatchFieldProps.uischema;
   const schema = dispatchFieldProps.schema;
   const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
@@ -59,4 +55,16 @@ const Dispatch = (dispatchFieldProps: RendererFieldProps) => {
   }
 };
 
-export const DispatchField = connect(mapStateToRendererFieldProps)(Dispatch);
+@inject("jsonFormsStore")
+@observer
+export class DispatchField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveProps = mapStateToDispatchFieldProps(jsonFormsStore, ownProps);
+    return (
+      <Dispatch {...effectiveProps}/>
+    )
+  }
+}
+
+//export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);

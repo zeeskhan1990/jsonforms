@@ -32,9 +32,10 @@ import {
   RendererProps,
   uiTypeIs,
 } from '@jsonforms/core';
-import { connectToJsonForms, StatelessRenderer } from '@jsonforms/react';
+import { StatelessRenderer, mergeTransformProps } from '@jsonforms/react';
 
 import Typography from 'material-ui/Typography';
+import { inject, observer } from 'mobx-react';
 
 /**
  * Default tester for a label.
@@ -67,4 +68,18 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connectToJsonForms(mapStateToProps, null)(MaterialLabelRenderer);
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedLabelRenderer extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterialLabelRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+//export default connectToJsonForms(mapStateToProps, null)(MaterialLabelRenderer);

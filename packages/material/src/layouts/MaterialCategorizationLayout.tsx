@@ -25,6 +25,7 @@
 import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import {observer, inject} from 'mobx-react'
 import {
   and,
   Categorization,
@@ -36,7 +37,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import { RendererComponent, mergeTransformProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 const isSingleLevelCategorization: Tester = and(
@@ -99,6 +100,21 @@ export class MaterialCategorizationLayoutRenderer
     }
 }
 
-export default connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class MaterialCategorizationLayout extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterialCategorizationLayoutRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToLayoutProps
 )(MaterialCategorizationLayoutRenderer);
+ */

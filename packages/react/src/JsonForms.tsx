@@ -25,10 +25,10 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { JsonFormsRendererProps, mapStateToRendererProps, JsonFormsProps, jsonFormsStore } from '@jsonforms/core';
+import { mapStateToRendererProps, JsonFormsProps } from '@jsonforms/core';
 import { inject, observer } from "mobx-react"
 
-class JsonFormsRenderer extends React.Component<JsonFormsRendererProps, null> {
+class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
   render() {
     const { uischema, schema, path, renderers } =  this.props;
 

@@ -31,18 +31,19 @@ import {
   isDateControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapDispatchToControlProps,
+  mapActionToControlProps,
   mapStateToControlProps,
   RankedTester,
   rankWith,
   StatePropsOfControl
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control, mergeTransformProps } from '@jsonforms/react';
 import { DatePicker } from 'material-ui-pickers';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { inject, observer } from 'mobx-react';
 
 export interface DateControl {
   momentLocale?: Moment;
@@ -135,7 +136,22 @@ export const addLabelProps = (mapStateToProps: (s, p) => any) =>
   };
 
 export const materialDateControlTester: RankedTester = rankWith(4, isDateControl);
-export default connectToJsonForms(
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedDateControl extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, addLabelProps(mapStateToControlProps))
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps())
+    return (
+      <MaterialDateControl {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   addLabelProps(mapStateToControlProps),
   mapDispatchToControlProps
-)(MaterialDateControl);
+)(MaterialDateControl); */

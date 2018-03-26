@@ -29,7 +29,7 @@ import {
   mapStateToTableControlProps,
   TableControlProps
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import {RendererComponent, mergeTransformProps } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from 'material-ui/Button';
@@ -40,6 +40,7 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 import Grid from 'material-ui/Grid';
+import { inject, observer } from 'mobx-react';
 
 export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
   constructor(props) {
@@ -156,7 +157,22 @@ export interface TableState {
   openConfirmDelete: boolean;
 }
 
-export default connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedArrayControlRenderer extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToTableControlProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToTableControlProps())
+    return (
+      <MaterialArrayControlRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToTableControlProps,
   mapActionToTableControlProps
 )(MaterialArrayControlRenderer);
+ */

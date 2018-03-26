@@ -31,8 +31,9 @@ import {
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import { inject, observer } from 'mobx-react';
 
 /**
  * Default tester for a vertical layout.
@@ -54,6 +55,20 @@ export const MaterialVerticalLayoutRenderer  = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-export default connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class MaterialVerticalLayout extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterialVerticalLayoutRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToLayoutProps
-)(MaterialVerticalLayoutRenderer);
+)(MaterialVerticalLayoutRenderer); */

@@ -30,11 +30,12 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import {mergeTransformProps } from '@jsonforms/react';
 
 import { FormControlLabel } from 'material-ui/Form';
 
 import MaterialBooleanField from '../fields/MaterialBooleanField';
+import { inject, observer } from 'mobx-react';
 
 export const MaterialBooleanControl =
   ({  label, uischema, schema, visible, parentPath }: ControlProps) => {
@@ -52,9 +53,23 @@ export const MaterialBooleanControl =
     );
   };
 
-const ConnectedMaterialBooleanControl = connectToJsonForms(
+  @inject("jsonFormsStore")
+  @observer
+  export default class ConnectedMaterialBooleanControl extends React.Component<any, null>  {
+    render() {
+      const {jsonFormsStore, ...ownProps} = this.props
+      const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+      //Merge the dispatch prop here
+      const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+      return (
+        <MaterialBooleanControl {...effectiveProps}/>
+      )
+    }
+  }
+
+/* const ConnectedMaterialBooleanControl = connectToJsonForms(
   mapStateToControlProps
-)(MaterialBooleanControl);
+)(MaterialBooleanControl); */
 
 export const materialBooleanControlTester: RankedTester = rankWith(2, isBooleanControl);
-export default ConnectedMaterialBooleanControl;
+//export default ConnectedMaterialBooleanControl;

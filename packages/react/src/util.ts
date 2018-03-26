@@ -24,13 +24,10 @@
 */
 import * as _ from 'lodash';
 import {
-    mapActionToControlProps,
     mapStateToControlProps,
     IJsonFormsStore
     } from '@jsonforms/core';
 import { getPropsTransformers } from '@jsonforms/core'
-import { connect } from 'react-redux';
-import { Component } from 'react';
 /**
  * JSONForms specific connect function. This is a wrapper
  * around redux's connect function that executes any registered
@@ -41,7 +38,7 @@ import { Component } from 'react';
  * @param {(dispatch, ownProps) => any} mapDispatchToProps
  * @returns {(Component) => any} function expecting a Renderer Component to be connected
  */
-export const connectToJsonForms = (
+/* export const connectToJsonForms = (
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapActionToControlProps) => Component => {
 
@@ -54,9 +51,20 @@ export const connectToJsonForms = (
       )},
     mapDispatchToProps
   )(Component);
-};
+}; */
 
-export const connectComponentToJsonForms = (
+export const mergeTransformProps = (
+  store: IJsonFormsStore,
+  ownProps: any,
+  mapStateToProps: (store: IJsonFormsStore, ownProps) => any = mapStateToControlProps) => {
+    return (getPropsTransformers(store) || []).reduce(
+      (props, materializer) =>
+        _.merge(props, materializer(store, props)),
+      mapStateToProps(store, ownProps)
+    )
+  }
+
+/* export const connectComponentToJsonForms = (
   store: IJsonFormsStore,
   ownProps: any,
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
@@ -66,6 +74,7 @@ export const connectComponentToJsonForms = (
     const propsFromDispatch: any = mapDispatchToProps(store, ownProps)
 
     
+}; */
 
   /* return connect(
     (state, ownProps) => {
@@ -76,4 +85,3 @@ export const connectComponentToJsonForms = (
       )},
     mapDispatchToProps
   )(Component); */
-};

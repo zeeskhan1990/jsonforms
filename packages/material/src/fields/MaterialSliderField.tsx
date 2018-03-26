@@ -26,13 +26,14 @@ import * as React from 'react';
 import {
   FieldProps,
   isRangeControl,
-  mapDispatchToFieldProps,
+  mapActionToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import Input from 'material-ui/Input';
+import { inject, observer } from 'mobx-react';
 
 const MaterialSliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange, scopedSchema } = props;
@@ -53,12 +54,27 @@ const MaterialSliderField = (props: FieldProps) => {
   );
 };
 
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedSliderField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    return (
+      <MaterialSliderField {...effectiveProps}/>
+    )
+  }
+}
+
 /**
  * Matrial tester for slider controls.
  * @type {RankedTester}
  */
 export const materialSliderFieldTester: RankedTester = rankWith(4, isRangeControl);
-export default connectToJsonForms(
+/* export default connectToJsonForms(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialSliderField);
+ */

@@ -31,8 +31,9 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import Input from 'material-ui/Input';
+import { inject, observer } from 'mobx-react';
 
 export const MaterialDateField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -51,4 +52,19 @@ export const MaterialDateField = (props: FieldProps) => {
   );
 };
 export const materialDateFieldTester: RankedTester = rankWith(2, isDateControl);
-export default connectToJsonForms(mapStateToFieldProps, mapActionToFieldProps)(mapActionToFieldProps);
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedDateField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    return (
+      <MaterialDateField {...effectiveProps}/>
+    )
+  }
+}
+
+//export default connectToJsonForms(mapStateToFieldProps, mapActionToFieldProps)(mapActionToFieldProps);

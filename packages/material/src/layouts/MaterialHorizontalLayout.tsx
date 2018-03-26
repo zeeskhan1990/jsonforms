@@ -31,8 +31,9 @@ import {
   RendererProps,
   uiTypeIs
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import { observer, inject } from 'mobx-react';
 
 /**
  * Default tester for a horizontal layout.
@@ -57,7 +58,21 @@ export const MaterialHorizontalLayoutRenderer = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-const ConnectedMaterialHorizontalLayoutRendered = connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class ConnectedMaterialHorizontalLayoutRendered extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    return (
+      <MaterialHorizontalLayoutRenderer {...effectiveProps}/>
+    )
+  }
+}
+
+/* const ConnectedMaterialHorizontalLayoutRendered = connectToJsonForms(
   mapStateToLayoutProps
 )(MaterialHorizontalLayoutRenderer);
-export default ConnectedMaterialHorizontalLayoutRendered;
+export default ConnectedMaterialHorizontalLayoutRendered; */

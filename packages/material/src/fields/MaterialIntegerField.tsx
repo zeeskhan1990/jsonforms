@@ -26,13 +26,14 @@ import * as React from 'react';
 import {
   FieldProps,
   isIntegerControl,
-  mapDispatchToFieldProps,
+  mapActionToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import Input from 'material-ui/Input';
+import { inject, observer } from 'mobx-react';
 
 export const MaterialIntegerField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -53,7 +54,23 @@ export const MaterialIntegerField = (props: FieldProps) => {
   );
 };
 export const materialIntegerFieldTester: RankedTester = rankWith(2, isIntegerControl);
-export default connectToJsonForms(
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedIntegerField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    return (
+      <MaterialIntegerField {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialIntegerField);
+ */

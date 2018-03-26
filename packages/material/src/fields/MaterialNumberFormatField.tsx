@@ -27,13 +27,14 @@ import {
   FieldProps,
   Formatted,
   isNumberFormatControl,
-  mapDispatchToFieldProps,
+  mapActionToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { mergeTransformProps } from '@jsonforms/react';
 import Input from 'material-ui/Input';
+import { inject, observer } from 'mobx-react';
 
 const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
   const {
@@ -82,7 +83,22 @@ const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
  * @type {RankedTester}
  */
 export const materialNumberFormatFieldTester: RankedTester = rankWith(4, isNumberFormatControl);
-export default connectToJsonForms(
+
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedNumberFormatField extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    return (
+      <MaterialNumberFormatField {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(MaterialNumberFormatField);
+  mapActionToFieldProps
+)(MaterialNumberFormatField); */

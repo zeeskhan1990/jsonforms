@@ -32,14 +32,15 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isTimeControl,
-  mapDispatchToControlProps,
+  mapActionToControlProps,
   mapStateToControlProps,
   or,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control, mergeTransformProps } from '@jsonforms/react';
 import TextField from 'material-ui/TextField';
+import { inject, observer } from 'mobx-react';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {
   render() {
@@ -90,7 +91,21 @@ export const materialNativeControlTester: RankedTester = rankWith(
   or(isDateControl, isTimeControl)
 );
 
-export default connectToJsonForms(
+@inject("jsonFormsStore")
+@observer
+export default class MaterializedNativeControl extends React.Component<any, null>  {
+  render() {
+    const {jsonFormsStore, ...ownProps} = this.props
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+    //Merge the dispatch prop here
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps())
+    return (
+      <MaterialNativeControl {...effectiveProps}/>
+    )
+  }
+}
+
+/* export default connectToJsonForms(
   mapStateToControlProps,
   mapDispatchToControlProps
-)(MaterialNativeControl);
+)(MaterialNativeControl); */
