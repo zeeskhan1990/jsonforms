@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { FieldProps, RankedTester } from '@jsonforms/core';
+import { RankedTester } from '@jsonforms/core';
 import { MaterialArrayControlRenderer, materialArrayControlTester } from './complex';
 import { MaterialLabelRenderer, materialLabelRendererTester } from './additional';
 import {
@@ -90,8 +90,8 @@ export const materialRenderers = [
   // additional
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];
-
-export const materialFields: { tester: RankedTester, field: ComponentType<FieldProps> }[] = [
+//Needs revisit, any replaces FieldProps
+export const materialFields: { tester: RankedTester, field: ComponentType<any> }[] = [
   { tester: materialBooleanFieldTester, field: MaterialBooleanField },
   { tester: materialDateFieldTester, field: MaterialDateField },
   { tester: materialEnumFieldTester, field: MaterialEnumField },
