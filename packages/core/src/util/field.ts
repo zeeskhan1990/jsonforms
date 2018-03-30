@@ -38,7 +38,7 @@ import {
   mapActionToControlProps,
   StatePropsOfScopedRenderer
 } from './renderer';
-import { IJsonFormsStore } from '../reducers';
+import { IJsonFormsStore } from '../stores';
 
 /**
  * State props of a field.

@@ -22,34 +22,22 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './util';
+import {observable, action} from 'mobx';
 
-export * from './models/jsonSchema';
-export * from './store';
-export * from './stores';
-export * from './generators';
+export class TransformPropsStore {
+  @observable transformers: any
 
-export * from './models/uischema';
+  constructor() {
+    this.transformers = []
+  }
 
-import * as Test from './testers';
-export * from './testers';
-export { Test };
+  @action
+  setTransformers = (transformers) => {
+    this.transformers = transformers;
+  }
 
-import {
-  convertToValidClassName,
-  createLabelDescriptionFrom
-} from './util';
-import { ControlElement, LabelDescription } from './models/uischema';
-
-const Helpers: {
-  createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string
-} = {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-};
-
-export { Helpers };
-
-export * from './util';
-export * from './store';
+  @action
+  addTransformer = (transformer) => {
+    this.transformers = this.transformers.concat([transformer]);
+  }
+}

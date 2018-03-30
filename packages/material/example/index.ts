@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createExampleSelection } from '../../examples/src/register';
+
+/* import { createExampleSelection } from '../../examples/src/register';
 import { materialFields, materialRenderers } from '../src';
 
 window.onload = () => {
@@ -31,3 +32,4 @@ window.onload = () => {
     materialFields
   );
 };
+ */

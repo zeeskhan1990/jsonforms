@@ -37,9 +37,9 @@ import {
   getErrorAt,
   getSubErrorsAt
 } from '../';
-import { update } from '../actions';
+import { updateStore } from '../util/store.util';
 import { ErrorObject } from 'ajv';
-import { IJsonFormsStore } from '../reducers';
+import { IJsonFormsStore } from '../stores';
 
 export interface Labels {
   default: string;
@@ -345,7 +345,7 @@ export const mapStateToControlProps = (store: IJsonFormsStore, ownProps): StateP
  */
 export const mapActionToControlProps = (): ActionPropsOfControl => ({
   handleChange(path, value) {
-    update(path, () => value)
+    updateStore(path, () => value)
   }
 });
 
@@ -402,7 +402,7 @@ export interface TableControlProps extends StatePropsOfTable, ActionPropsOfTable
  */
 export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
   addItem: (path: string) => () => {
-      update(
+      updateStore(
         path,
         array => {
           if (array === undefined || array === null) {
@@ -416,7 +416,7 @@ export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
       )
   },
   removeItems: (path: string, toDelete: any[]) => () => {
-      update(
+      updateStore(
         path,
         array => {
           const clone = _.clone(array);

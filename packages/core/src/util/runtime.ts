@@ -27,7 +27,7 @@ import * as _ from 'lodash';
 import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
-import { IJsonFormsStore } from '../reducers';
+import { IJsonFormsStore } from '../stores';
 
 export const evalVisibility = (uischema: UISchemaElement, data: any) => {
   // TODO condition evaluation should be done somewhere else

@@ -22,34 +22,28 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './util';
+import { RankedTester } from '../testers';
+import {observable, action} from 'mobx';
 
-export * from './models/jsonSchema';
-export * from './store';
-export * from './stores';
-export * from './generators';
+export class FieldStore {
+  @observable fields: { tester: RankedTester, field: any }[]
 
-export * from './models/uischema';
+  constructor() {
+    this.fields = []
+  }
 
-import * as Test from './testers';
-export * from './testers';
-export { Test };
+  @action
+  setFields = (fields) => {
+    this.fields = fields;
+  }
 
-import {
-  convertToValidClassName,
-  createLabelDescriptionFrom
-} from './util';
-import { ControlElement, LabelDescription } from './models/uischema';
+  @action
+  addField = (tester, field) => {
+    this.fields =  this.fields.concat([{ tester, field }]);
+  }
 
-const Helpers: {
-  createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string
-} = {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-};
-
-export { Helpers };
-
-export * from './util';
-export * from './store';
+  @action
+  removeField = (tester) => {
+    this.fields = this.fields.filter(t => t.tester !== tester);
+  }
+}

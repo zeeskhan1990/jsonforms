@@ -22,34 +22,24 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './util';
+import * as _ from 'lodash';
+import { configDefault } from '../configDefault';
+import {observable, action} from 'mobx';
 
-export * from './models/jsonSchema';
-export * from './store';
-export * from './stores';
-export * from './generators';
+export class ConfigStore {
+  @observable config: any;
 
-export * from './models/uischema';
+  constructor() {
+    this.config = this.applyDefaultConfiguration()
+  }
 
-import * as Test from './testers';
-export * from './testers';
-export { Test };
+  applyDefaultConfiguration(config: any = {}) {
+    _.merge(configDefault, config);
+  }
 
-import {
-  convertToValidClassName,
-  createLabelDescriptionFrom
-} from './util';
-import { ControlElement, LabelDescription } from './models/uischema';
-
-const Helpers: {
-  createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string
-} = {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-};
-
-export { Helpers };
-
-export * from './util';
-export * from './store';
+  @action
+  setConfiguration = (config: any) => {
+    this.config = this.applyDefaultConfiguration(config)
+  }
+  
+}

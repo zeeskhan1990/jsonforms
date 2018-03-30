@@ -22,34 +22,22 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './util';
+import { RendererStore } from './renderers.store';
+import { FieldStore } from './fields.store';
+import { ConfigStore } from './config.store';
+import { CoreStore } from './core.store';
+import {TransformPropsStore} from './transformProps.store'
 
-export * from './models/jsonSchema';
-export * from './store';
-export * from './stores';
-export * from './generators';
+export interface IJsonFormsStore {
+  rendererStore: RendererStore
+  fieldStore: FieldStore
+  coreStore: CoreStore
+  configStore: ConfigStore
+  transformPropsStore: TransformPropsStore
+}
 
-export * from './models/uischema';
+/* export const getData = coreStore.extractData
+export const getSchema = coreStore.extractSchema
+export const getUiSchema = coreStore.extractUiSchema */
 
-import * as Test from './testers';
-export * from './testers';
-export { Test };
-
-import {
-  convertToValidClassName,
-  createLabelDescriptionFrom
-} from './util';
-import { ControlElement, LabelDescription } from './models/uischema';
-
-const Helpers: {
-  createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string
-} = {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-};
-
-export { Helpers };
-
-export * from './util';
-export * from './store';
+/* export const getConfig = configStore.config */
