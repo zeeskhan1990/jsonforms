@@ -1,5 +1,6 @@
 node_modules
 coverage
+packages/jsonforms-react-seed/build
 .nyc_output
 dist
 lib
