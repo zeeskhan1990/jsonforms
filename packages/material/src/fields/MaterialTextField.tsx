@@ -59,7 +59,6 @@ export const MaterialTextField = (props: FieldProps) => {
     inputProps.size = maxLength;
   }
   const onChange = ev => handleChange(path, ev.target.value);
-  debugger
   return (
     <Input
       type='text'
@@ -86,7 +85,6 @@ export const materialTextFieldTester: RankedTester = rankWith(1, isStringControl
 @observer
 export default class MaterializedTextField extends React.Component<any, null>  {
   render() {
-    debugger
     const {jsonFormsStore, ...ownProps} = this.props
     const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
     //Merge the dispatch prop here

@@ -62,7 +62,6 @@ export const mergeTransformProps = (
         _.merge(props, materializer(store, props)),
       mapStoreToProps(store, ownProps)
     )
-    debugger
     return transformedProps
   }
 

@@ -63,11 +63,12 @@ export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
 export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
-export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps) : DispatchFieldProps => {
-  const fromFieldProps = mapStoreToFieldProps(store);
+export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps: object) : any => {
+  debugger
+  //const fromFieldProps = mapStoreToFieldProps(store, ownProps);
   const fromActionProps = mapActionToControlProps(store);
   const fields = store.fieldStore.fields;
-  return Object.assign({}, fromActionProps, fromFieldProps, {fields});
+  return Object.assign({}, fromActionProps, ownProps, {fields});
 }
 /**
  * Map state to field props.
@@ -90,7 +91,6 @@ export const mapStoreToFieldProps = (store: IJsonFormsStore, ownProps): StatePro
     defaultConfig,
     ownProps.uischema.options
   );
-  debugger
   return {
     data: Resolve.data(store.coreStore.extractData, path),
     className: inputClassName.join(' '),

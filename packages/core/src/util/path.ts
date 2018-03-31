@@ -73,7 +73,6 @@ export const toDataPath = (schemaPath: string): string => {
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
-  debugger
   const segments = toDataPathSegments(scopableUi.scope);
 
   if (_.isEmpty(segments) && path === undefined) {

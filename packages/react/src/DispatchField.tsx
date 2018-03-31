@@ -44,7 +44,6 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
     return <UnknownRenderer type={'field'}/>;
   } else {
     const Field = field.field;
-    debugger
     return (
       <Field
         schema={schema}
@@ -59,7 +58,6 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
 @observer
 export class DispatchField extends React.Component<any, null>  {
   render() {
-    debugger
     const {jsonFormsStore, ...ownProps} = this.props
     const effectiveProps = mapStoreToDispatchFieldProps(jsonFormsStore, ownProps);
     return (

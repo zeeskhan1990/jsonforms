@@ -62,7 +62,6 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       style.display = 'none';
     }
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-    debugger
     return (
       <FormControl
         style={style}
