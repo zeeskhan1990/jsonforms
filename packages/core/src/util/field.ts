@@ -64,7 +64,6 @@ export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
 export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps: object) : any => {
-  debugger
   //const fromFieldProps = mapStoreToFieldProps(store, ownProps);
   const fromActionProps = mapActionToControlProps(store);
   const fields = store.fieldStore.fields;

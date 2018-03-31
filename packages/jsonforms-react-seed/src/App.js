@@ -8,7 +8,6 @@ import { inject, observer } from 'mobx-react';
 
 export default inject("jsonFormsStore")(observer(class App extends Component {
   render() {
-    debugger
     const printedStore = JSON.stringify(this.props.jsonFormsStore, null, 2)
     return (
       <div>
