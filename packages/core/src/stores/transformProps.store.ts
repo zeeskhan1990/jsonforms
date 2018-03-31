@@ -25,7 +25,7 @@
 import {observable, action} from 'mobx';
 
 export class TransformPropsStore {
-  @observable transformers: any
+  @observable transformers: any[]
 
   constructor() {
     this.transformers = []

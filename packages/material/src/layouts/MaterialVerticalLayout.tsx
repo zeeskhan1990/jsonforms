@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import {
-  mapStateToLayoutProps,
+  mapStoreToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
@@ -60,7 +60,7 @@ export const MaterialVerticalLayoutRenderer  = (
 export default class MaterialVerticalLayout extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
     //Merge the dispatch prop here
     const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
     return (
@@ -70,5 +70,5 @@ export default class MaterialVerticalLayout extends React.Component<any, null>  
 }
 
 /* export default connectToJsonForms(
-  mapStateToLayoutProps
+  mapStoreToLayoutProps
 )(MaterialVerticalLayoutRenderer); */

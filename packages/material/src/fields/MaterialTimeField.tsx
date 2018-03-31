@@ -27,7 +27,7 @@ import {
   FieldProps,
   isTimeControl,
   mapActionToFieldProps,
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -58,9 +58,9 @@ export const materialTimeFieldTester: RankedTester = rankWith(2, isTimeControl);
 export default class MaterializedTimeField extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
     return (
       <MaterialTimeField {...effectiveProps}/>
     )
@@ -68,6 +68,6 @@ export default class MaterializedTimeField extends React.Component<any, null>  {
 }
 
 /* export default connectToJsonForms(
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   mapActionToFieldProps
 )(MaterialTimeField); */

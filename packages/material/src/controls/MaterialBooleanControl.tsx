@@ -26,7 +26,7 @@ import * as React from 'react';
 import {
   ControlProps,
   isBooleanControl,
-  mapStateToControlProps,
+  mapStoreToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
@@ -58,7 +58,7 @@ export const MaterialBooleanControl =
   export default class ConnectedMaterialBooleanControl extends React.Component<any, null>  {
     render() {
       const {jsonFormsStore, ...ownProps} = this.props
-      const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+      const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
       //Merge the dispatch prop here
       const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
       return (
@@ -68,7 +68,7 @@ export const MaterialBooleanControl =
   }
 
 /* const ConnectedMaterialBooleanControl = connectToJsonForms(
-  mapStateToControlProps
+  mapStoreToControlProps
 )(MaterialBooleanControl); */
 
 export const materialBooleanControlTester: RankedTester = rankWith(2, isBooleanControl);

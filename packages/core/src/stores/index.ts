@@ -26,7 +26,7 @@ import { RendererStore } from './renderers.store';
 import { FieldStore } from './fields.store';
 import { ConfigStore } from './config.store';
 import { CoreStore } from './core.store';
-import {TransformPropsStore} from './transformProps.store'
+import { TransformPropsStore } from './transformProps.store'
 
 export interface IJsonFormsStore {
   rendererStore: RendererStore

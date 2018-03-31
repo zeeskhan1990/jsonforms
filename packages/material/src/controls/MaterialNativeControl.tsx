@@ -33,7 +33,7 @@ import {
   isPlainLabel,
   isTimeControl,
   mapActionToControlProps,
-  mapStateToControlProps,
+  mapStoreToControlProps,
   or,
   RankedTester,
   rankWith
@@ -96,9 +96,9 @@ export const materialNativeControlTester: RankedTester = rankWith(
 export default class MaterializedNativeControl extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps(jsonFormsStore))
     return (
       <MaterialNativeControl {...effectiveProps}/>
     )
@@ -106,6 +106,6 @@ export default class MaterializedNativeControl extends React.Component<any, null
 }
 
 /* export default connectToJsonForms(
-  mapStateToControlProps,
+  mapStoreToControlProps,
   mapDispatchToControlProps
 )(MaterialNativeControl); */

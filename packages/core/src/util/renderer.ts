@@ -37,7 +37,7 @@ import {
   getErrorAt,
   getSubErrorsAt
 } from '../';
-import { updateStore } from '../util/store.util';
+import { updateStore } from '../util/storeUtil';
 import { ErrorObject } from 'ajv';
 import { IJsonFormsStore } from '../stores';
 
@@ -229,7 +229,7 @@ export interface ActionPropsOfControl {
   handleChange(path: string, value: any);
 }
 
-export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps): JsonFormsProps => ({
+export const mapStoreToRendererProps = (store: IJsonFormsStore, ownProps): JsonFormsProps => ({
   renderers: store.rendererStore.renderers || [],
   schema: ownProps.schema || store.coreStore.extractSchema,
   uischema: ownProps.uischema || store.coreStore.extractUiSchema,
@@ -242,7 +242,7 @@ export const mapStateToRendererProps = (store: IJsonFormsStore, ownProps): JsonF
  * @param ownProps any own props
  * @returns {StatePropsOfLayout}
  */
-export const mapStateToLayoutProps = (store: IJsonFormsStore, ownProps): StatePropsOfLayout => {
+export const mapStoreToLayoutProps = (store: IJsonFormsStore, ownProps): StatePropsOfLayout => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, store);
 
   return {
@@ -301,7 +301,7 @@ export const isDescriptionHidden =
  * @param ownProps any own props
  * @returns {StatePropsOfControl} state props for a control
  */
-export const mapStateToControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfControl => {
+export const mapStoreToControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfControl => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, store);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, store);
@@ -343,9 +343,9 @@ export const mapStateToControlProps = (store: IJsonFormsStore, ownProps): StateP
  * Map action to control props.
  * @returns {ActionPropsOfControl} action props for a control
  */
-export const mapActionToControlProps = (): ActionPropsOfControl => ({
+export const mapActionToControlProps = (jsonFormsStore: IJsonFormsStore): ActionPropsOfControl => ({
   handleChange(path, value) {
-    updateStore(path, () => value)
+    updateStore(path, () => value, jsonFormsStore)
   }
 });
 
@@ -364,8 +364,8 @@ export interface StatePropsOfTable extends StatePropsOfControl {
  * @param ownProps any element's own props
  * @returns {StatePropsOfTable} state props for a table control
  */
-export const mapStateToTableControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfTable => {
-  const {path, ...props} = mapStateToControlProps(store, ownProps);
+export const mapStoreToTableControlProps = (store: IJsonFormsStore, ownProps): StatePropsOfTable => {
+  const {path, ...props} = mapStoreToControlProps(store, ownProps);
   const controlElement = ownProps.uischema as ControlElement;
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
@@ -400,7 +400,7 @@ export interface TableControlProps extends StatePropsOfTable, ActionPropsOfTable
  * @param action the store's action method
  * @returns {ActionPropsOfTable} action props for a table control
  */
-export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
+export const mapActionToTableControlProps = (jsonFormsStore: IJsonFormsStore): ActionPropsOfTable => ({
   addItem: (path: string) => () => {
       updateStore(
         path,
@@ -412,7 +412,8 @@ export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
           array.push({});
 
           return array;
-        }
+        },
+        jsonFormsStore
       )
   },
   removeItems: (path: string, toDelete: any[]) => () => {
@@ -422,7 +423,8 @@ export const mapActionToTableControlProps = (): ActionPropsOfTable => ({
           const clone = _.clone(array);
           toDelete.forEach(s => clone.splice(clone.indexOf(s), 1));
           return clone;
-        }
+        },
+        jsonFormsStore
       )
   }
 });

@@ -25,7 +25,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { mapStateToRendererProps, JsonFormsProps } from '@jsonforms/core';
+import { mapStoreToRendererProps, JsonFormsProps } from '@jsonforms/core';
 import { inject, observer } from "mobx-react"
 
 class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
@@ -33,7 +33,6 @@ class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
     const { uischema, schema, path, renderers } =  this.props;
 
     const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-  
   if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer type={'renderer'}/>;
   } else {
@@ -76,7 +75,7 @@ class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
 export class JsonForms extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...otherProps} = this.props
-    const effectiveProps = mapStateToRendererProps(jsonFormsStore, otherProps);
+    const effectiveProps = mapStoreToRendererProps(jsonFormsStore, otherProps);
     return (
       <JsonFormsRenderer {...effectiveProps}/>
     )
@@ -84,6 +83,6 @@ export class JsonForms extends React.Component<any, null>  {
 }
 
 /* export const JsonForms = connect(
-  mapStateToActionRendererProps,
+  mapStoreToActionRendererProps,
   null
 )(JsonFormsDispatchRenderer); */

@@ -30,7 +30,7 @@ import {
   isDateTimeControl,
   isPlainLabel,
   mapActionToControlProps,
-  mapStateToControlProps,
+  mapStoreToControlProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -103,9 +103,9 @@ export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTim
 export default class MaterializedDateTimeControl extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps(jsonFormsStore))
     return (
       <MaterialDateTimeControl {...effectiveProps}/>
     )
@@ -113,5 +113,5 @@ export default class MaterializedDateTimeControl extends React.Component<any, nu
 }
 
 /* export default connectToJsonForms(
-  mapStateToControlProps, mapDispatchToControlProps
+  mapStoreToControlProps, mapDispatchToControlProps
 )(MaterialDateTimeControl); */

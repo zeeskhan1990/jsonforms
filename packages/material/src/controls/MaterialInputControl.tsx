@@ -31,7 +31,7 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapStateToControlProps,
+  mapStoreToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
@@ -62,7 +62,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       style.display = 'none';
     }
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-
+    debugger
     return (
       <FormControl
         style={style}
@@ -88,7 +88,7 @@ export const materialInputControlTester: RankedTester = rankWith(1, isControl);
 export default class MaterializedInputControl extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToControlProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
     //Merge the dispatch prop here
     const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
     return (
@@ -97,4 +97,4 @@ export default class MaterializedInputControl extends React.Component<any, null>
   }
 }
 
-//export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);
+//export default connectToJsonForms(mapStoreToControlProps)(MaterialInputControl);

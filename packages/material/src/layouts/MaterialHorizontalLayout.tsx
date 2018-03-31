@@ -25,7 +25,7 @@
 import * as React from 'react';
 import {
   HorizontalLayout,
-  mapStateToLayoutProps,
+  mapStoreToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
@@ -63,7 +63,7 @@ export const MaterialHorizontalLayoutRenderer = (
 export default class ConnectedMaterialHorizontalLayoutRendered extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
     //Merge the dispatch prop here
     const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
     return (
@@ -73,6 +73,6 @@ export default class ConnectedMaterialHorizontalLayoutRendered extends React.Com
 }
 
 /* const ConnectedMaterialHorizontalLayoutRendered = connectToJsonForms(
-  mapStateToLayoutProps
+  mapStoreToLayoutProps
 )(MaterialHorizontalLayoutRenderer);
 export default ConnectedMaterialHorizontalLayoutRendered; */

@@ -1,16 +1,106 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as DOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { combineReducers, createStore } from 'redux';
-import { Provider } from 'react-redux';
-import schema from './schema.json';
-import uischema from './uischema.json';
-import * as Core from '@jsonforms/core';
+import { Provider, observer } from 'mobx-react';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
 import RatingControl from './RatingControl';
 import ratingControlTester from './ratingControlTester'
+import * as jsonformsCore from '@jsonforms/core';
+
+const schema = {
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "done": {
+      "type": "boolean"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "rating": {
+      "type": "integer",
+      "maximum": 5
+    },
+    "recurrence": {
+      "type": "string",
+      "enum": [
+        "Never",
+        "Daily",
+        "Weekly",
+        "Monthly"
+      ]
+    },
+    "recurrence_interval": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
+
+const uischema = {
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": false,
+      "scope": "#/properties/done"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/name"
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/due_date"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/rating"
+        }
+      ]
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/description",
+      "options": {
+          "multi": true
+      }
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/recurrence"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/recurrence_interval",
+          "rule": {
+              "effect": "HIDE",
+              "condition": {
+                  "scope": "#/properties/recurrence",
+                  "expectedValue": "Never"
+              }
+          }
+        }
+      ]
+    }
+  ]
+}
 
 const data = {
   name: 'Send email to Adrian',
@@ -20,11 +110,17 @@ const data = {
   rating: 3,
 };
 
-//Core.
+//const jsonFormsStore: IJsonFormsStore =   jsonformsCore.initializeStore()
+
+const jsonFormsStore = jsonformsCore.activateStore(data, schema, uischema)
+jsonformsCore.setFields(materialFields, jsonFormsStore)
+jsonformsCore.setRenderers(materialRenderers, jsonFormsStore)
+//jsonformsCore.registerRenderer(ratingControlTester, RatingControl, jsonFormsStore)
 
 
 
-const store = createStore(
+
+/* const store = createStore(
   combineReducers({ jsonforms: jsonformsReducer() }),
   {
     jsonforms: {
@@ -34,16 +130,26 @@ const store = createStore(
   }
 );
 
-store.dispatch(Actions.init(data, schema, uischema));
+store.dispatch(Actions.init(data, schema, uischema)); */
 
 
 // Uncomment this line (and respective import) to register our custom renderer
-store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
+//store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+
+const RootComponent = observer(class RootComponent extends React.Component {
+  render() {
+    return (
+      <Provider jsonFormsStore={jsonFormsStore}>
+        <App />
+      </Provider>
+    );
+  }
+})
+
+
+DOM.render(
+  <RootComponent/>,
   document.getElementById('root')
 );
 registerServiceWorker();

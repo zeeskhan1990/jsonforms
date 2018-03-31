@@ -63,9 +63,9 @@ export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
 export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
-export const mapStateToDispatchFieldProps = (store: IJsonFormsStore, ownProps) : DispatchFieldProps => {
-  const fromFieldProps = mapStateToFieldProps(store, ownProps);
-  const fromActionProps = mapActionToControlProps();
+export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps) : DispatchFieldProps => {
+  const fromFieldProps = mapStoreToFieldProps(store);
+  const fromActionProps = mapActionToControlProps(store);
   const fields = store.fieldStore.fields;
   return Object.assign({}, fromActionProps, fromFieldProps, {fields});
 }
@@ -76,7 +76,7 @@ export const mapStateToDispatchFieldProps = (store: IJsonFormsStore, ownProps) :
  * @param ownProps any own props
  * @returns {StatePropsOfField} state props of a field
  */
-export const mapStateToFieldProps = (store: IJsonFormsStore, ownProps): StatePropsOfField => {
+export const mapStoreToFieldProps = (store: IJsonFormsStore, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, store);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, store);
@@ -90,7 +90,7 @@ export const mapStateToFieldProps = (store: IJsonFormsStore, ownProps): StatePro
     defaultConfig,
     ownProps.uischema.options
   );
-
+  debugger
   return {
     data: Resolve.data(store.coreStore.extractData, path),
     className: inputClassName.join(' '),
@@ -111,5 +111,5 @@ export const mapStateToFieldProps = (store: IJsonFormsStore, ownProps): StatePro
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapActionToFieldProps: () => ActionPropsOfControl =
+export const mapActionToFieldProps: (store: IJsonFormsStore) => ActionPropsOfControl =
   mapActionToControlProps;

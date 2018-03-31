@@ -27,7 +27,7 @@ import {
   FieldProps,
   isRangeControl,
   mapActionToFieldProps,
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -59,9 +59,9 @@ const MaterialSliderField = (props: FieldProps) => {
 export default class MaterializedSliderField extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
     return (
       <MaterialSliderField {...effectiveProps}/>
     )
@@ -74,7 +74,7 @@ export default class MaterializedSliderField extends React.Component<any, null> 
  */
 export const materialSliderFieldTester: RankedTester = rankWith(4, isRangeControl);
 /* export default connectToJsonForms(
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   mapDispatchToFieldProps
 )(MaterialSliderField);
  */

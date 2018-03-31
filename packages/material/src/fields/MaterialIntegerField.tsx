@@ -27,7 +27,7 @@ import {
   FieldProps,
   isIntegerControl,
   mapActionToFieldProps,
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
@@ -60,9 +60,9 @@ export const materialIntegerFieldTester: RankedTester = rankWith(2, isIntegerCon
 export default class MaterializedIntegerField extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
     return (
       <MaterialIntegerField {...effectiveProps}/>
     )
@@ -70,7 +70,7 @@ export default class MaterializedIntegerField extends React.Component<any, null>
 }
 
 /* export default connectToJsonForms(
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   mapDispatchToFieldProps
 )(MaterialIntegerField);
  */

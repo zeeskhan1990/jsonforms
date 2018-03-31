@@ -60,7 +60,7 @@ export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
     );
   };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStoreToProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
@@ -73,7 +73,7 @@ const mapStateToProps = (state, ownProps) => {
 export default class MaterializedLabelRenderer extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToProps)
     //Merge the dispatch prop here
     const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
     return (
@@ -82,4 +82,4 @@ export default class MaterializedLabelRenderer extends React.Component<any, null
   }
 }
 
-//export default connectToJsonForms(mapStateToProps, null)(MaterialLabelRenderer);
+//export default connectToJsonForms(mapStoreToProps, null)(MaterialLabelRenderer);

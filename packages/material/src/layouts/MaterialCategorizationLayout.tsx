@@ -29,7 +29,7 @@ import {observer, inject} from 'mobx-react'
 import {
   and,
   Categorization,
-  mapStateToLayoutProps,
+  mapStoreToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
@@ -105,7 +105,7 @@ export class MaterialCategorizationLayoutRenderer
 export default class MaterialCategorizationLayout extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToLayoutProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
     //Merge the dispatch prop here
     const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
     return (
@@ -115,6 +115,6 @@ export default class MaterialCategorizationLayout extends React.Component<any, n
 }
 
 /* export default connectToJsonForms(
-  mapStateToLayoutProps
+  mapStoreToLayoutProps
 )(MaterialCategorizationLayoutRenderer);
  */

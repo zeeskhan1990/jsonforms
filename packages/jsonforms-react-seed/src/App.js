@@ -1,13 +1,15 @@
-import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { getData } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
+import { inject, observer } from 'mobx-react';
 
 
-class App extends Component {
+export default inject("jsonFormsStore")(observer(class App extends Component {
   render() {
+    debugger
+    const printedStore = JSON.stringify(this.props.jsonFormsStore, null, 2)
     return (
       <div>
         <div className="App">
@@ -20,7 +22,7 @@ class App extends Component {
 
         <h4 className="data-title">Bound data</h4>
         <div className="data-content">
-          <pre>{this.props.dataAsString}</pre>
+          <pre>Show Data Here</pre>
         </div>
 
         <div className="demoform">
@@ -30,11 +32,9 @@ class App extends Component {
     );
   }
 
-}
+}))
 
-const mapStateToProps = state => {
+/* const mapStateToProps = state => {
   return { dataAsString: JSON.stringify(getData(state), null, 2) }
-};
-
-export default connect(mapStateToProps, null)(App);
+}; */
 

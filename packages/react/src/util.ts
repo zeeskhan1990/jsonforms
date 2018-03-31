@@ -24,22 +24,22 @@
 */
 import * as _ from 'lodash';
 import {
-    mapStateToControlProps,
+    mapStoreToControlProps,
     IJsonFormsStore
     } from '@jsonforms/core';
 import { getPropsTransformers } from '@jsonforms/core'
 /**
  * JSONForms specific connect function. This is a wrapper
  * around redux's connect function that executes any registered
- * prop transformers on the result of the given mapStateToProps
+ * prop transformers on the result of the given mapStoreToProps
  * function before passing them to the actual connect function.
  *
- * @param {(state, ownProps) => any} mapStateToProps
+ * @param {(state, ownProps) => any} mapStoreToProps
  * @param {(dispatch, ownProps) => any} mapDispatchToProps
  * @returns {(Component) => any} function expecting a Renderer Component to be connected
  */
 /* export const connectToJsonForms = (
-  mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
+  mapStoreToProps: (state, ownProps) => any = mapStoreToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapActionToControlProps) => Component => {
 
   return connect(
@@ -47,7 +47,7 @@ import { getPropsTransformers } from '@jsonforms/core'
       (getPropsTransformers(state) || []).reduce(
         (props, materializer) =>
           _.merge(props, materializer(state, props)),
-        mapStateToProps(state, ownProps)
+        mapStoreToProps(state, ownProps)
       )},
     mapDispatchToProps
   )(Component);
@@ -56,21 +56,23 @@ import { getPropsTransformers } from '@jsonforms/core'
 export const mergeTransformProps = (
   store: IJsonFormsStore,
   ownProps: any,
-  mapStateToProps: (store: IJsonFormsStore, ownProps) => any = mapStateToControlProps) => {
-    return (getPropsTransformers(store) || []).reduce(
+  mapStoreToProps: (store: IJsonFormsStore, ownProps: any) => any = mapStoreToControlProps) => {
+    const transformedProps =  (getPropsTransformers(store) || []).reduce(
       (props, materializer) =>
         _.merge(props, materializer(store, props)),
-      mapStateToProps(store, ownProps)
+      mapStoreToProps(store, ownProps)
     )
+    debugger
+    return transformedProps
   }
 
 /* export const connectComponentToJsonForms = (
   store: IJsonFormsStore,
   ownProps: any,
-  mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
+  mapStoreToProps: (state, ownProps) => any = mapStoreToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapActionToControlProps) => Component => {
 
-    const propsFromState: any = mapStateToProps(store, ownProps)
+    const propsFromState: any = mapStoreToProps(store, ownProps)
     const propsFromDispatch: any = mapDispatchToProps(store, ownProps)
 
     
@@ -81,7 +83,7 @@ export const mergeTransformProps = (
       (getPropsTransformers(state) || []).reduce(
         (props, materializer) =>
           _.merge(props, materializer(state, props)),
-        mapStateToProps(state, ownProps)
+        mapStoreToProps(state, ownProps)
       )},
     mapDispatchToProps
   )(Component); */

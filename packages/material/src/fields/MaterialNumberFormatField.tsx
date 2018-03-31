@@ -28,7 +28,7 @@ import {
   Formatted,
   isNumberFormatControl,
   mapActionToFieldProps,
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -89,9 +89,9 @@ export const materialNumberFormatFieldTester: RankedTester = rankWith(4, isNumbe
 export default class MaterializedNumberFormatField extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStateToFieldProps)
+    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
     //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps())
+    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
     return (
       <MaterialNumberFormatField {...effectiveProps}/>
     )
@@ -99,6 +99,6 @@ export default class MaterializedNumberFormatField extends React.Component<any, 
 }
 
 /* export default connectToJsonForms(
-  mapStateToFieldProps,
+  mapStoreToFieldProps,
   mapActionToFieldProps
 )(MaterialNumberFormatField); */
