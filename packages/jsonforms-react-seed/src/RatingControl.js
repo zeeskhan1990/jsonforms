@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { mapStateToControlProps, mapDispatchToControlProps } from '@jsonforms/core';
-import { connect } from 'react-redux';
+import { mapStoreValuesToControlProps, mapUpdateActionToControlProps } from '@jsonforms/core';
+import { createPropsForItem } from '@jsonforms/react';
 import { Rating } from './Rating';
+import { inject, observer } from 'mobx-react';
 
 const RatingControl = ({ data, handleChange, path }) => (
   <Rating
@@ -10,7 +11,12 @@ const RatingControl = ({ data, handleChange, path }) => (
   />
 );
 
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps,
-)(RatingControl);
+export default inject("jsonFormsStore")(observer(class extends React.Component  {
+  render() {
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToControlProps, mapUpdateActionToControlProps)
+    return (
+      <RatingControl {...effectiveProps}/>
+    )
+  }
+}
+))

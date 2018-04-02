@@ -103,7 +103,7 @@ const uischema = {
 }
 
 const data = {
-  name: 'Send email to Adrian',
+  name: 'S',
   description: 'Confirm if you have passed the subject\nHereby ...',
   done: true,
   recurrence: 'Daily',
@@ -115,7 +115,7 @@ const data = {
 const jsonFormsStore = jsonformsCore.activateStore(data, schema, uischema)
 jsonformsCore.setFields(materialFields, jsonFormsStore)
 jsonformsCore.setRenderers(materialRenderers, jsonFormsStore)
-//jsonformsCore.registerRenderer(ratingControlTester, RatingControl, jsonFormsStore)
+jsonformsCore.registerRenderer(ratingControlTester, RatingControl, jsonFormsStore)
 
 
 

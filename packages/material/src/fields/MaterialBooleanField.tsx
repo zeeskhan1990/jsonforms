@@ -26,12 +26,12 @@ import * as React from 'react';
 import {
   FieldProps,
   isBooleanControl,
-  mapActionToFieldProps,
-  mapStoreToFieldProps,
+  mapUpdateActionToFieldProps,
+  mapStoreValuesToFieldProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { mergeTransformProps } from '@jsonforms/react';
+import { createPropsForItem } from '@jsonforms/react';
 import Checkbox from 'material-ui/Checkbox';
 import { inject, observer } from 'mobx-react';
 
@@ -57,17 +57,9 @@ export const materialBooleanFieldTester: RankedTester = rankWith(2, isBooleanCon
 @observer
 export default class MaterializedBooleanField extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToFieldProps, mapUpdateActionToFieldProps)
     return (
       <MaterialBooleanField {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToFieldProps,
-  mapDispatchToFieldProps
-)(MaterialBooleanField); */

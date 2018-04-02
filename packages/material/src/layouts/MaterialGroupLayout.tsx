@@ -27,14 +27,14 @@ import * as _ from 'lodash';
 import { Card, CardContent, CardHeader } from 'material-ui';
 import {
   GroupLayout,
-  mapStoreToLayoutProps,
+  mapStoreValuesToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
-import { mergeTransformProps } from '@jsonforms/react';
+import { createPropsForItem } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 import { inject, observer } from 'mobx-react';
 
@@ -71,18 +71,11 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
 @observer
 export default class MaterializedGroupLayout extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToLayoutProps)
     return (
       <MaterializedGroupLayoutRenderer {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToLayoutProps
-)(MaterializedGroupLayoutRenderer); */
 
 export const materialGroupTester: RankedTester = withIncreasedRank(1, groupTester);

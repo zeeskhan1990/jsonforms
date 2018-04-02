@@ -32,7 +32,7 @@ import {
   RendererProps,
   uiTypeIs,
 } from '@jsonforms/core';
-import { StatelessRenderer, mergeTransformProps } from '@jsonforms/react';
+import { StatelessRenderer, createPropsForItem } from '@jsonforms/react';
 
 import Typography from 'material-ui/Typography';
 import { inject, observer } from 'mobx-react';
@@ -60,7 +60,7 @@ export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
     );
   };
 
-const mapStoreToProps = (state, ownProps) => {
+const mapStoreValuesToProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
@@ -71,11 +71,8 @@ const mapStoreToProps = (state, ownProps) => {
 @inject("jsonFormsStore")
 @observer
 export default class MaterializedLabelRenderer extends React.Component<any, null>  {
-  render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+  render() {    
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToProps)
     return (
       <MaterialLabelRenderer {...effectiveProps}/>
     )

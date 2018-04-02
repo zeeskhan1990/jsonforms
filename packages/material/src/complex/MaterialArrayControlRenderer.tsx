@@ -25,11 +25,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  mapActionToTableControlProps,
-  mapStoreToTableControlProps,
+  mapUpdateActionToTableControlProps,
+  mapStoreValuesToTableControlProps,
   TableControlProps
 } from '@jsonforms/core';
-import {RendererComponent, mergeTransformProps } from '@jsonforms/react';
+import {RendererComponent, createPropsForItem } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from 'material-ui/Button';
@@ -161,18 +161,9 @@ export interface TableState {
 @observer
 export default class MaterializedArrayControlRenderer extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToTableControlProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToTableControlProps(jsonFormsStore))
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToTableControlProps, mapUpdateActionToTableControlProps)
     return (
       <MaterialArrayControlRenderer {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToTableControlProps,
-  mapActionToTableControlProps
-)(MaterialArrayControlRenderer);
- */

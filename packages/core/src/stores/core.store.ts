@@ -61,13 +61,13 @@ export class CoreStore {
   };
 
   sanitizeErrors(validator, data): ErrorObject[] {
-    this.validate(validator, data).map(error => {
+    let sanitizedErrors = [];
+    sanitizedErrors = this.validate(validator, data).map(error => {
       error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
   
       return error;
     });
-
-    return [];
+    return sanitizedErrors
   }
 
   @computed get extractData() {
@@ -104,29 +104,16 @@ export class CoreStore {
   @action
   updateData = (path: string, updater: (any) => any) => {
     if (path === undefined || path === null) {
-      /* return {
-        data: this.data,
-        uischema: this.uischema,
-        schema: this.schema
-      }; */
-
       //no-op;
     } else if (path === '') {
       // empty path is ok
       const result = updater(this.data);
 
       if (result === undefined || result === null) {
-        /* return {
-          data: this.data,
-          uischema: this.uischema,
-          schema: this.schema
-        }; */
-
         //no-op;
       }
 
       const sanitizedErrors = this.sanitizeErrors(this.validator, result);
-
       this.data = result
       this.errors = sanitizedErrors
     } else {
@@ -134,7 +121,6 @@ export class CoreStore {
       const newData = updater(oldData);
       const newState: any = _.set(_.cloneDeep(this.data), path, newData);
       const sanitizedErrors = this.sanitizeErrors(this.validator, newState);
-
       this.data = newState
       this.errors = sanitizedErrors
     }

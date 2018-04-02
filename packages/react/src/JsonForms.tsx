@@ -25,7 +25,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { mapStoreToRendererProps, JsonFormsProps } from '@jsonforms/core';
+import { mapStoreValuesToRendererProps, JsonFormsProps } from '@jsonforms/core';
 import { inject, observer } from "mobx-react"
 
 class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
@@ -50,39 +50,14 @@ class JsonFormsRenderer extends React.Component<JsonFormsProps, null> {
   }
 }
 
-/* const JsonFormsDispatchRenderer =
-  ({ uischema, schema, path, renderers }: JsonFormsProps) => {
-  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-  
-  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-    return <UnknownRenderer type={'renderer'}/>;
-  } else {
-    const Render = renderer.renderer;
-
-    return (
-      <Render
-        uischema={uischema}
-        schema={schema}
-        path={path}
-        renderers={renderers}
-      />
-    );
-  }
-}; */
-
 @inject("jsonFormsStore")
 @observer
 export class JsonForms extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...otherProps} = this.props
-    const effectiveProps = mapStoreToRendererProps(jsonFormsStore, otherProps);
+    const effectiveProps = mapStoreValuesToRendererProps(jsonFormsStore, otherProps);
     return (
       <JsonFormsRenderer {...effectiveProps}/>
     )
   }
 }
-
-/* export const JsonForms = connect(
-  mapStoreToActionRendererProps,
-  null
-)(JsonFormsDispatchRenderer); */

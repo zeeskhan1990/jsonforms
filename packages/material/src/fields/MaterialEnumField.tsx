@@ -26,12 +26,12 @@ import * as React from 'react';
 import {
   FieldProps,
   isEnumControl,
-  mapActionToFieldProps,
-  mapStoreToFieldProps,
+  mapUpdateActionToFieldProps,
+  mapStoreValuesToFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { mergeTransformProps } from '@jsonforms/react';
+import { createPropsForItem } from '@jsonforms/react';
 
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
@@ -75,10 +75,7 @@ export const materialEnumFieldTester: RankedTester = rankWith(2, isEnumControl);
 @observer
 export default class MaterializedEnumField extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToFieldProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToFieldProps(jsonFormsStore))
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToFieldProps, mapUpdateActionToFieldProps)
     return (
       <MaterialEnumField {...effectiveProps}/>
     )

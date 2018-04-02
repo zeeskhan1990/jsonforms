@@ -24,14 +24,14 @@
 */
 import * as React from 'react';
 import {
-  mapStoreToLayoutProps,
+  mapStoreValuesToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { mergeTransformProps } from '@jsonforms/react';
+import { createPropsForItem } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 import { inject, observer } from 'mobx-react';
 
@@ -59,16 +59,9 @@ export const MaterialVerticalLayoutRenderer  = (
 @observer
 export default class MaterialVerticalLayout extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToLayoutProps)
     return (
       <MaterialVerticalLayoutRenderer {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToLayoutProps
-)(MaterialVerticalLayoutRenderer); */

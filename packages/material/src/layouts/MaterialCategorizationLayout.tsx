@@ -29,7 +29,7 @@ import {observer, inject} from 'mobx-react'
 import {
   and,
   Categorization,
-  mapStoreToLayoutProps,
+  mapStoreValuesToLayoutProps,
   RankedTester,
   rankWith,
   RendererProps,
@@ -37,7 +37,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { RendererComponent, mergeTransformProps } from '@jsonforms/react';
+import { RendererComponent, createPropsForItem } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 const isSingleLevelCategorization: Tester = and(
@@ -104,17 +104,9 @@ export class MaterialCategorizationLayoutRenderer
 @observer
 export default class MaterialCategorizationLayout extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToLayoutProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToLayoutProps)
     return (
       <MaterialCategorizationLayoutRenderer {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToLayoutProps
-)(MaterialCategorizationLayoutRenderer);
- */

@@ -31,13 +31,13 @@ import {
   isDateControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapActionToControlProps,
-  mapStoreToControlProps,
+  mapUpdateActionToControlProps,
+  mapStoreValuesToControlProps,
   RankedTester,
   rankWith,
   StatePropsOfControl
 } from '@jsonforms/core';
-import { Control, mergeTransformProps } from '@jsonforms/react';
+import { Control, createPropsForItem } from '@jsonforms/react';
 import { DatePicker } from 'material-ui-pickers';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
@@ -121,9 +121,9 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
   }
 }
 
-export const addLabelProps = (mapStoreToProps: (s, p) => any) =>
+export const addLabelProps = (mapStoreValuesToProps: (s, p) => any) =>
   (state, ownProps): StatePropsOfControl => {
-    const stateProps = mapStoreToProps(state, ownProps);
+    const stateProps = mapStoreValuesToProps(state, ownProps);
 
     return {
       ...stateProps,
@@ -141,17 +141,9 @@ export const materialDateControlTester: RankedTester = rankWith(4, isDateControl
 @observer
 export default class MaterializedDateControl extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, addLabelProps(mapStoreToControlProps))
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps(jsonFormsStore))
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToControlProps, mapUpdateActionToControlProps)
     return (
       <MaterialDateControl {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  addLabelProps(mapStoreToControlProps),
-  mapDispatchToControlProps
-)(MaterialDateControl); */

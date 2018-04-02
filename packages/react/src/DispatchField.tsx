@@ -26,7 +26,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
 import {observer, inject} from 'mobx-react'
-import { DispatchFieldProps, mapStoreToDispatchFieldProps } from '@jsonforms/core';
+import { DispatchFieldProps, mapStoreValuesToDispatchFieldProps } from '@jsonforms/core';
 /**dProps } from '@jsonforms/core';
 /**
  * Props of the {@link DispatchField} renderer.
@@ -59,11 +59,9 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
 export class DispatchField extends React.Component<any, null>  {
   render() {
     const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveProps = mapStoreToDispatchFieldProps(jsonFormsStore, ownProps);
+    const effectiveProps = mapStoreValuesToDispatchFieldProps(jsonFormsStore, ownProps);
     return (
       <Dispatch {...effectiveProps}/>
     )
   }
 }
-
-//export const DispatchField = connect(mapStoreToDispatchFieldProps)(Dispatch);

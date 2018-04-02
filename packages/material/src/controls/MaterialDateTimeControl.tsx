@@ -29,12 +29,12 @@ import {
   ControlState,
   isDateTimeControl,
   isPlainLabel,
-  mapActionToControlProps,
-  mapStoreToControlProps,
+  mapUpdateActionToControlProps,
+  mapStoreValuesToControlProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { Control, mergeTransformProps } from '@jsonforms/react';
+import { Control, createPropsForItem } from '@jsonforms/react';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
@@ -102,16 +102,9 @@ export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTim
 @observer
 export default class MaterializedDateTimeControl extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, mapActionToControlProps(jsonFormsStore))
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToControlProps, mapUpdateActionToControlProps)
     return (
       <MaterialDateTimeControl {...effectiveProps}/>
     )
   }
 }
-
-/* export default connectToJsonForms(
-  mapStoreToControlProps, mapDispatchToControlProps
-)(MaterialDateTimeControl); */

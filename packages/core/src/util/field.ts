@@ -35,7 +35,7 @@ import {
 } from '../util';
 import {
   ActionPropsOfControl,
-  mapActionToControlProps,
+  mapUpdateActionToControlProps,
   StatePropsOfScopedRenderer
 } from './renderer';
 import { IJsonFormsStore } from '../stores';
@@ -63,9 +63,8 @@ export interface FieldProps extends StatePropsOfField, ActionPropsOfControl {
 export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
-export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps: object) : any => {
-  //const fromFieldProps = mapStoreToFieldProps(store, ownProps);
-  const fromActionProps = mapActionToControlProps(store);
+export const mapStoreValuesToDispatchFieldProps = (store: IJsonFormsStore, ownProps: object) : any => {
+  const fromActionProps = mapUpdateActionToControlProps(store);
   const fields = store.fieldStore.fields;
   return Object.assign({}, fromActionProps, ownProps, {fields});
 }
@@ -76,7 +75,7 @@ export const mapStoreToDispatchFieldProps = (store: IJsonFormsStore, ownProps: o
  * @param ownProps any own props
  * @returns {StatePropsOfField} state props of a field
  */
-export const mapStoreToFieldProps = (store: IJsonFormsStore, ownProps): StatePropsOfField => {
+export const mapStoreValuesToFieldProps = (store: IJsonFormsStore, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, store);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, store);
@@ -106,9 +105,9 @@ export const mapStoreToFieldProps = (store: IJsonFormsStore, ownProps): StatePro
 };
 
 /**
- * Synonym for mapActionToControlProps.
+ * Synonym for mapUpdateActionToControlProps.
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapActionToFieldProps: (store: IJsonFormsStore) => ActionPropsOfControl =
-  mapActionToControlProps;
+export const mapUpdateActionToFieldProps: (store: IJsonFormsStore) => ActionPropsOfControl =
+  mapUpdateActionToControlProps;

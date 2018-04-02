@@ -26,11 +26,11 @@ import * as React from 'react';
 import {
   ControlProps,
   isBooleanControl,
-  mapStoreToControlProps,
+  mapStoreValuesToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import {mergeTransformProps } from '@jsonforms/react';
+import {createPropsForItem } from '@jsonforms/react';
 
 import { FormControlLabel } from 'material-ui/Form';
 
@@ -57,10 +57,7 @@ export const MaterialBooleanControl =
   @observer
   export default class ConnectedMaterialBooleanControl extends React.Component<any, null>  {
     render() {
-      const {jsonFormsStore, ...ownProps} = this.props
-      const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
-      //Merge the dispatch prop here
-      const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+      const effectiveProps = createPropsForItem(this.props, mapStoreValuesToControlProps)
       return (
         <MaterialBooleanControl {...effectiveProps}/>
       )

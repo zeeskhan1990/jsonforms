@@ -31,11 +31,11 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapStoreToControlProps,
+  mapStoreValuesToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchField, mergeTransformProps } from '@jsonforms/react';
+import { Control, DispatchField, createPropsForItem } from '@jsonforms/react';
 
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
@@ -86,10 +86,7 @@ export const materialInputControlTester: RankedTester = rankWith(1, isControl);
 @observer
 export default class MaterializedInputControl extends React.Component<any, null>  {
   render() {
-    const {jsonFormsStore, ...ownProps} = this.props
-    const effectiveFromStateProps = mergeTransformProps(jsonFormsStore, ownProps, mapStoreToControlProps)
-    //Merge the dispatch prop here
-    const effectiveProps = Object.assign({}, effectiveFromStateProps, {})
+    const effectiveProps = createPropsForItem(this.props, mapStoreValuesToControlProps)
     return (
       <MaterialInputControl {...effectiveProps}/>
     )
