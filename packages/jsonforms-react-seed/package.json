@@ -1,11 +1,11 @@
 {
   "name": "jsonforms-react-seed",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^3.0.1",
-    "@jsonforms/material-renderers": "^3.0.1",
-    "@jsonforms/react": "^3.0.1",
+    "@jsonforms/core": "^3.0.2",
+    "@jsonforms/material-renderers": "^3.0.2",
+    "@jsonforms/react": "^3.0.2",
     "material-ui": "1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "material-ui-pickers": "1.0.0-beta.12",
