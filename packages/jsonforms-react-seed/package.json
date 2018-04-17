@@ -1,19 +1,19 @@
 {
   "name": "jsonforms-react-seed",
-  "version": "0.1.0",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^2.0.0",
-    "@jsonforms/react": "^2.0.0",
-    "@jsonforms/material-renderers": "^2.0.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "react-scripts": "1.0.17",
+    "@jsonforms/core": "^3.0.0",
+    "@jsonforms/material-renderers": "^3.0.0",
+    "@jsonforms/react": "^3.0.0",
     "material-ui": "1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "material-ui-pickers": "1.0.0-beta.12",
     "moment": "^2.20.1",
     "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.0.17",
     "redux": "^3.7.2"
   },
   "scripts": {
